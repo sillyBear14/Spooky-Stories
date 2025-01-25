@@ -4,33 +4,33 @@
 
 @layer base {
   :root {
-    --background: 20 14.3% 4.1%;
-    --foreground: 60 9.1% 97.8%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 0 0% 100%; /* Pure white for better readability */
 
-    --card: 20 14.3% 4.1%;
-    --card-foreground: 60 9.1% 97.8%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 60 9.1% 97.8%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 47.9 95.8% 53.1%;
-    --primary-foreground: 26 83.3% 14.1%;
+    --primary: 142 70% 45%; /* Swamp green */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 75.1%; /* Lighter muted text */
 
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
+    --accent: 142 70% 45%; /* Swamp green */
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
-    --ring: 35.5 91.7% 32.9%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 142 70% 45%; /* Swamp green */
 
     --radius: 0.75rem;
   }
@@ -43,6 +43,8 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      sans-serif;
   }
 }
 
@@ -61,11 +63,28 @@
   animation: ghostFloat 6s ease-in-out infinite;
 }
 
-/* Spooky text shadow effect */
+/* Spooky swamp glow effect for headers */
 .spooky-text {
-  text-shadow: 0 0 10px rgba(255, 165, 0, 0.5), 0 0 20px rgba(255, 165, 0, 0.3),
-    0 0 30px rgba(255, 165, 0, 0.1);
-  animation: flicker 4s infinite;
+  font-family: var(--font-creepster);
+  color: #4dff91; /* Bright swamp green */
+  text-shadow: 0 0 10px rgba(77, 255, 145, 0.7),
+    0 0 20px rgba(77, 255, 145, 0.5), 0 0 30px rgba(77, 255, 145, 0.3),
+    0 0 40px rgba(77, 255, 145, 0.1);
+  animation: swampGlow 3s ease-in-out infinite alternate;
+  letter-spacing: 0.05em; /* Slightly increase letter spacing for better readability */
+}
+
+@keyframes swampGlow {
+  from {
+    text-shadow: 0 0 10px rgba(77, 255, 145, 0.7),
+      0 0 20px rgba(77, 255, 145, 0.5), 0 0 30px rgba(77, 255, 145, 0.3),
+      0 0 40px rgba(77, 255, 145, 0.1);
+  }
+  to {
+    text-shadow: 0 0 15px rgba(77, 255, 145, 0.9),
+      0 0 25px rgba(77, 255, 145, 0.7), 0 0 35px rgba(77, 255, 145, 0.5),
+      0 0 45px rgba(77, 255, 145, 0.3);
+  }
 }
 
 /* Fog effect overlay */
@@ -107,11 +126,11 @@ a:hover {
 
 /* Glass card effect */
 .glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Shimmer effect */
@@ -144,4 +163,51 @@ a:hover {
   100% {
     transform: translateX(100%) rotate(30deg);
   }
+}
+
+/* Spooky Background */
+.spooky-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/images/spooky-background.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.8;
+  z-index: -1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(77, 255, 145, 0.2);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(77, 255, 145, 0.3);
 }
