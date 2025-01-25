@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 import { PostgrestError } from '@supabase/supabase-js'
+import { AIHelper } from '@/components/ui/ai-helper'
 
 interface DraftStory {
   title: string
@@ -92,6 +93,7 @@ export default function WritePage() {
   const [visibility, setVisibility] = useState<'public' | 'private'>('public')
   const [hasDraft, setHasDraft] = useState(false)
   const supabase = createClient()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Fetch categories when component mounts
   useEffect(() => {
@@ -198,6 +200,8 @@ export default function WritePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
+
     if (!user) {
       toast.error('You must be logged in to write a story')
       return
@@ -282,7 +286,12 @@ export default function WritePage() {
       toast.error(errorMessage)
     } finally {
       setLoading(false)
+      setIsSubmitting(false)
     }
+  }
+
+  const handleAISuggestion = (suggestion: string) => {
+    setContent(prev => `${prev}${prev.endsWith(' ') ? '' : ' '}${suggestion}`)
   }
 
   return (
@@ -414,6 +423,13 @@ export default function WritePage() {
             </p>
           </div>
 
+          <div className="space-y-2">
+            <AIHelper
+              storySoFar={content}
+              onSuggestion={handleAISuggestion}
+            />
+          </div>
+
           <div className="flex flex-col gap-4">
             <div className="flex gap-4">
               <button
@@ -425,10 +441,10 @@ export default function WritePage() {
               </button>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={isSubmitting}
                 className="flex-1 px-4 py-2 bg-primary/80 hover:bg-primary/90 text-primary-foreground rounded-lg font-medium transition-colors disabled:opacity-50"
               >
-                {loading ? 'Publishing...' : 'Publish Story'}
+                {isSubmitting ? 'Publishing...' : 'Publish Story'}
               </button>
             </div>
             <button

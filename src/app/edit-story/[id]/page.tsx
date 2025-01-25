@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 import { PostgrestError } from '@supabase/supabase-js'
+import { AIHelper } from '@/components/ui/ai-helper'
 
 // Reuse the DraftStory and Category interfaces from WritePage
 interface DraftStory {
@@ -142,6 +143,10 @@ export default function EditStoryPage() {
     }
   }
 
+  const handleAISuggestion = (suggestion: string) => {
+    setContent(prev => `${prev}${prev.endsWith(' ') ? '' : ' '}${suggestion}`)
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="space-y-6">
@@ -210,6 +215,12 @@ export default function EditStoryPage() {
               placeholder="Begin your terrifying tale here..."
               className="w-full px-4 py-2 rounded-lg bg-secondary/50 border border-white/10 text-foreground min-h-[400px] resize-y"
               required
+            />
+            
+            <AIHelper
+              storySoFar={content}
+              onSuggestion={handleAISuggestion}
+              category={category}
             />
           </div>
 

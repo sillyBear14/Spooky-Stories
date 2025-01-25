@@ -1,51 +1,81 @@
 'use client'
 
-import { useState } from 'react'
-import { AuthModal } from '@/components/auth/auth-modal'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { toast } from 'sonner'
+import { PublicInfoModal } from '@/components/ui/public-info-modal'
 
-export default function Home() {
-  const [showAuthModal, setShowAuthModal] = useState(false)
-  const [authView, setAuthView] = useState<'login' | 'signup'>('signup')
+export default function HomePage() {
+  const [stories, setStories] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [showInfoModal, setShowInfoModal] = useState(false)
+  const [selectedAuthor, setSelectedAuthor] = useState<any>(null)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const fetchStories = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('stories')
+          .select('id, title, content, created_at, author:profiles(username, avatar_url, bio)')
+          .eq('visibility', 'public')
+          .order('created_at', { ascending: false })
+          .limit(5)
+
+        if (error) throw error
+
+        setStories(data || [])
+      } catch (error) {
+        console.error('Error fetching stories:', error)
+        toast.error('Failed to load stories')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchStories()
+  }, [])
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="relative">
-        <div className="ghost-float">
-          <h1 className="font-creepy text-6xl spooky-text mb-8">
-            Spooky Stories
-          </h1>
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <h1 className="text-3xl font-creepy spooky-text mb-4">🏚️ Recent Spooky Stories</h1>
+      {loading ? (
+        <p>Loading stories...</p>
+      ) : stories.length === 0 ? (
+        <p>No stories available. Check back later!</p>
+      ) : (
+        <div className="space-y-4">
+          {stories.map((story) => (
+            <div key={story.id} className="p-4 bg-secondary/50 border border-white/10 rounded-lg">
+              <h2 className="text-xl font-medium mb-2">{story.title}</h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                {new Date(story.created_at).toLocaleDateString()} by {story.author.username}
+              </p>
+              <p className="text-base mb-4">{story.content}</p>
+              <div className="flex items-center gap-2">
+                <img
+                  src={story.author.avatar_url || '/default-avatar.png'}
+                  alt="Author avatar"
+                  className="w-8 h-8 rounded-full cursor-pointer"
+                  onClick={() => {
+                    setSelectedAuthor(story.author)
+                    setShowInfoModal(true)
+                  }}
+                />
+                <span className="text-sm text-muted-foreground">{story.author.username}</span>
+              </div>
+            </div>
+          ))}
         </div>
-        <p className="text-lg text-muted-foreground text-center max-w-[500px] mb-8">
-          Welcome to the darkest corner of the internet, where your nightmares come alive through words...
-        </p>
-        <div className="flex justify-center gap-4">
-          <button
-            onClick={() => {
-              setAuthView('signup')
-              setShowAuthModal(true)
-            }}
-            className="bg-primary/80 hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors backdrop-blur-sm"
-          >
-            Start Writing
-          </button>
-          <button
-            onClick={() => {
-              setAuthView('login')
-              setShowAuthModal(true)
-            }}
-            className="bg-secondary/80 hover:bg-secondary/90 text-secondary-foreground px-6 py-3 rounded-lg font-medium transition-colors backdrop-blur-sm"
-          >
-            Sign In
-          </button>
-        </div>
-      </div>
-      <div className="fixed inset-0 fog-overlay pointer-events-none" />
-      
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        defaultView={authView}
-      />
-    </main>
+      )}
+
+      {selectedAuthor && (
+        <PublicInfoModal
+          isOpen={showInfoModal}
+          onClose={() => setShowInfoModal(false)}
+          author={selectedAuthor}
+        />
+      )}
+    </div>
   )
 }
