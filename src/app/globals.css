@@ -33,6 +33,22 @@
     --ring: 142 70% 45%; /* Swamp green */
 
     --radius: 0.75rem;
+
+    /* Add new button-specific variables */
+    --button-glow: rgba(77, 255, 145, 0.5);
+    --button-glass: rgba(0, 0, 0, 0.4);
+  }
+
+  /* Add glowing cursor except for inputs and textareas */
+  body:not(input):not(textarea) * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='12' cy='12' r='6' fill='rgba(77, 255, 145, 0.3)'/%3E%3Ccircle cx='12' cy='12' r='3' fill='rgba(77, 255, 145, 0.6)'/%3E%3C/svg%3E"),
+      auto;
+  }
+
+  input,
+  textarea,
+  [contenteditable="true"] {
+    cursor: text;
   }
 }
 
@@ -210,4 +226,318 @@ a:hover {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(77, 255, 145, 0.3);
+}
+
+/* Global Button Styles */
+.btn,
+button,
+[type="button"],
+[type="submit"] {
+  @apply px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-200 relative overflow-hidden;
+  background: var(--button-glass);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  min-height: 24px;
+  min-width: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Action Button Variant (like "Write a Story") */
+.btn-action {
+  @apply px-4 py-2;
+  min-height: 40px;
+  background: linear-gradient(
+    180deg,
+    rgba(77, 255, 145, 0.2) 0%,
+    rgba(77, 255, 145, 0.1) 100%
+  );
+  border: 1px solid rgba(77, 255, 145, 0.3);
+  font-size: 0.875rem;
+}
+
+/* Small Button Variant (like "Change" button) */
+.btn-small {
+  @apply px-2.5 py-1 text-xs;
+  min-height: 24px;
+  background: transparent;
+  color: #4dff91;
+  border: none;
+  box-shadow: none;
+}
+
+.btn-small:hover {
+  background: rgba(77, 255, 145, 0.1);
+  transform: none;
+  box-shadow: none;
+  text-shadow: 0 0 8px rgba(77, 255, 145, 0.5);
+}
+
+/* Updated Modal Styles */
+[role="dialog"] {
+  @apply rounded-2xl;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(77, 255, 145, 0.1);
+  box-shadow: 0 0 20px rgba(77, 255, 145, 0.1);
+}
+
+[role="dialog"] .btn,
+[role="dialog"] button {
+  @apply px-2.5 py-1 text-xs;
+  min-height: 24px;
+}
+
+/* Primary Button Variant */
+.btn-primary,
+[type="submit"] {
+  background: linear-gradient(
+    180deg,
+    rgba(77, 255, 145, 0.2) 0%,
+    rgba(77, 255, 145, 0.1) 100%
+  );
+  border: 1px solid rgba(77, 255, 145, 0.3);
+}
+
+/* Destructive Button Variant */
+.btn-destructive {
+  --button-glow: rgba(255, 77, 77, 0.5);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 77, 77, 0.2) 0%,
+    rgba(255, 77, 77, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 77, 77, 0.3);
+}
+
+/* Ghost Button Variant */
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Disabled Button State */
+.btn:disabled,
+button:disabled,
+[type="button"]:disabled,
+[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Button Loading State */
+.btn-loading {
+  position: relative;
+  cursor: wait;
+}
+
+.btn-loading:before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  background: inherit;
+  border-radius: inherit;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Add shimmer effect to primary buttons */
+.btn-primary::before,
+[type="submit"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(77, 255, 145, 0.2),
+    transparent
+  );
+  animation: shimmerButton 3s infinite;
+}
+
+@keyframes shimmerButton {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Ghostly Text Effect */
+.ghostly-text {
+  animation: textFlicker 8s infinite;
+  text-shadow: 0 0 10px rgba(77, 255, 145, 0.7),
+    0 0 20px rgba(77, 255, 145, 0.5);
+  opacity: 0.9;
+}
+
+@keyframes textFlicker {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Floating Elements */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-5px) translateX(2px);
+  }
+  75% {
+    transform: translateY(5px) translateX(-2px);
+  }
+}
+
+/* Misty Overlay */
+.misty-overlay::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 50% 50%,
+      rgba(77, 255, 145, 0.03) 0%,
+      rgba(0, 0, 0, 0) 50%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0%,
+      rgba(77, 255, 145, 0.03) 50%,
+      transparent 100%
+    );
+  pointer-events: none;
+  z-index: 1;
+  animation: mistMove 20s infinite linear;
+}
+
+@keyframes mistMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Eerie Hover Effect */
+.eerie-hover {
+  transition: all 0.3s ease;
+}
+
+.eerie-hover:hover {
+  transform: scale(1.02) translateY(-2px);
+  filter: drop-shadow(0 0 10px rgba(77, 255, 145, 0.3));
+}
+
+/* Ghostly Card Effect */
+.ghost-card {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(77, 255, 145, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(77, 255, 145, 0.1),
+    inset 0 0 20px rgba(77, 255, 145, 0.05);
+  transition: all 0.3s ease;
+}
+
+.ghost-card:hover {
+  border-color: rgba(77, 255, 145, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 30px rgba(77, 255, 145, 0.2),
+    inset 0 0 30px rgba(77, 255, 145, 0.1);
+}
+
+/* Spooky Input Fields */
+input,
+textarea {
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(77, 255, 145, 0.2) !important;
+  color: #fff !important;
+  transition: all 0.3s ease !important;
+}
+
+input:focus,
+textarea:focus {
+  border-color: rgba(77, 255, 145, 0.4) !important;
+  box-shadow: 0 0 15px rgba(77, 255, 145, 0.2) !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Spectral Selection */
+::selection {
+  background: rgba(77, 255, 145, 0.3);
+  color: #fff;
+  text-shadow: 0 0 8px rgba(77, 255, 145, 0.5);
+}
+
+/* Enhanced Modal Dialog */
+[role="dialog"] {
+  animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Spooky Loading Spinner */
+.spooky-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(77, 255, 145, 0.1);
+  border-top-color: rgba(77, 255, 145, 0.7);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
