@@ -10,6 +10,7 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { Database } from '@/types/database'
 import { cn } from '@/lib/utils'
+import { useSoundManager } from '@/components/sound/sound-manager'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 
@@ -19,6 +20,8 @@ export function Header() {
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [authView, setAuthView] = useState<'login' | 'signup'>('login')
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false)
+  const { isMuted, toggleMute, isInitialized, volume, updateVolume, playSpecificSound } = useSoundManager()
   const supabase = createClient()
 
   const handleSignOut = async () => {
@@ -78,12 +81,56 @@ export function Header() {
         </Link>
 
         <nav className="flex items-center gap-4">
+          {isInitialized && (
+            <div className="flex items-center gap-2 relative">
+              <button
+                onClick={() => setShowVolumeSlider(!showVolumeSlider)}
+                className="p-2 rounded-full hover:bg-white/5 transition-colors"
+                title={isMuted ? "Enable spooky sounds" : "Mute sounds"}
+              >
+                {isMuted ? (
+                  <span className="text-xl" role="img" aria-label="sound-muted">
+                    🔇
+                  </span>
+                ) : (
+                  <span className="text-xl" role="img" aria-label="sound-playing">
+                    🔊
+                  </span>
+                )}
+              </button>
+              
+              {showVolumeSlider && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="absolute left-0 top-full mt-2 p-4 rounded-lg glass-card border border-white/10 min-w-[200px] z-50"
+                >
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="volume-slider" className="text-sm text-muted-foreground">Volume</label>
+                    <input
+                      id="volume-slider"
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={volume}
+                      onChange={(e) => updateVolume(parseFloat(e.target.value))}
+                      className="w-full appearance-none h-2 rounded-full bg-white/10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:shadow-primary/50 hover:[&::-webkit-slider-thumb]:bg-primary/80"
+                      aria-label="Adjust spooky sound volume"
+                      title="Adjust spooky sound volume"
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>👻</span>
+                      <span>💀</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          )}
           {user ? (
             <>
-              <Link href="/dashboard" className="text-sm hover:text-primary transition-colors">
-                Dashboard
-              </Link>
-              <Link href="/write" className="text-sm hover:text-primary transition-colors">
+              <Link href="/write" className="text-sm ethereal-link">
                 Write Story
               </Link>
               <div className="flex items-center gap-4">
@@ -125,7 +172,7 @@ export function Header() {
                   setAuthView('login')
                   setShowAuthModal(true)
                 }}
-                className="text-sm hover:text-primary transition-colors"
+                className="text-sm ethereal-link"
               >
                 Sign In
               </button>

@@ -21,50 +21,32 @@ export function Footer() {
           </div>
           
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold">Categories</h4>
+            <h4 className="text-sm font-semibold haunted-text">Categories</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">Ghost Stories</a>
+                <a href="#" className="ethereal-link">Ghost Stories</a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">Urban Legends</a>
+                <a href="#" className="ethereal-link">Urban Legends</a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">Paranormal</a>
+                <a href="#" className="ethereal-link">Paranormal</a>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">Psychological Horror</a>
+                <a href="#" className="ethereal-link">Psychological Horror</a>
               </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h4 className="text-sm font-semibold">Join Us</h4>
+            <h4 className="text-sm font-semibold haunted-text">Join Us</h4>
             <p className="text-sm text-muted-foreground">
               Share your darkest tales with our growing community of horror enthusiasts.
             </p>
             <div className="flex space-x-4">
-              <a
-                href="#"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                title="Twitter"
-              >
-                𝕏
-              </a>
-              <a
-                href="#"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                title="Discord"
-              >
-                Discord
-              </a>
-              <a
-                href="#"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                title="GitHub"
-              >
-                GitHub
-              </a>
+              <a href="#" className="ethereal-link" title="Twitter">𝕏</a>
+              <a href="#" className="ethereal-link" title="Discord">Discord</a>
+              <a href="#" className="ethereal-link" title="GitHub">GitHub</a>
             </div>
           </div>
         </div>

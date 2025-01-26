@@ -76,8 +76,8 @@ export default function MyStoriesPage() {
       ) : (
         <div className="space-y-4">
           {stories.map((story) => (
-            <div key={story.id} className="p-4 bg-secondary/50 border border-white/10 rounded-lg">
-              <h2 className="text-xl font-medium mb-2">{story.title}</h2>
+            <div key={story.id} className="p-4 bg-secondary/50 border border-white/10 rounded-lg story-card">
+              <h2 className="text-xl font-medium mb-2 haunted-text">{story.title}</h2>
               <p className="text-sm text-muted-foreground mb-4">
                 {story.content.slice(0, 100)}... {/* Show first 100 characters */}
               </p>
@@ -100,7 +100,7 @@ export default function MyStoriesPage() {
               </div>
             </div>
           ))}
-          <button className="w-full px-4 py-2 bg-secondary/80 hover:bg-secondary/90 text-secondary-foreground rounded-lg font-medium transition-colors">
+          <button className="w-full px-4 py-2 bg-secondary/80 hover:bg-secondary/90 text-secondary-foreground rounded-lg font-medium transition-colors ethereal-link">
             Load More
           </button>
         </div>

@@ -17,6 +17,7 @@ export function ClientLayout({ children }: ClientLayoutProps) {
         {children}
       </main>
       <Footer />
+      <div className="fog-layer" />
       <Toaster 
         theme="dark" 
         position="top-right"
